@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CheckerInfo : MonoBehaviour, ISelectable
 {
+    public bool Role { get; set; }
     public Color DefaultColor { get; set; }
     public Vector2 Coordinates { get; private set; }
 

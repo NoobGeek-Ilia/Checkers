@@ -18,28 +18,34 @@ public class CheckerMovement : MonoBehaviour
     private void CheckSelectedTile(Transform tile)
     {
         var tileInfo = tile.GetComponent<TileInfo>();
-        if (!tileInfo.IsFull)
-        {
-            if (_selectedChecker is null)
-                return;
-            else
-            {
-                SetNewCheckerCoordinates(tileInfo);
-                tileInfo.IsFull = true;
-                _previousTileInfo.IsFull = false;
-            }
-        }
-        else
+        if (tileInfo.IsFull)
         {
             _selectedChecker = GetSelectedChecker(tileInfo);
+            return;
+        }
+
+        if (_selectedChecker == null)
+            return;
+
+        if (IsDiagonalMove(_previousTileInfo.Coordinates, tileInfo.Coordinates))
+        {
+            SetNewCheckerCoordinates(tileInfo);
+            RefreshTileInfo(tileInfo);
         }
     }
+
     private void SetNewCheckerCoordinates(TileInfo tileInfo)
     {
         var checkerInfo = _selectedChecker.GetComponent<CheckerInfo>();
         checkerInfo.SetNewPosition(tileInfo.Coordinates);
         checkerInfo.ResetHighlight();
         _selectedChecker = null;
+    }
+
+    private void RefreshTileInfo(TileInfo tileInfo)
+    {
+        tileInfo.IsFull = true;
+        _previousTileInfo.IsFull = false;
     }
 
     private Transform GetSelectedChecker(TileInfo tileInfo)
@@ -59,5 +65,13 @@ public class CheckerMovement : MonoBehaviour
             }
         }
         return null;
+    }
+
+    private bool IsDiagonalMove(Vector2 startPosition, Vector2 targetPosition)
+    {
+        float deltaX = Mathf.Abs(targetPosition.x - startPosition.x);
+        float deltaY = Mathf.Abs(targetPosition.y - startPosition.y);
+
+        return deltaX == deltaY;
     }
 }

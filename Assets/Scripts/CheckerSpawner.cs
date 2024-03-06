@@ -47,18 +47,22 @@ public class CheckerSpawner : MonoBehaviour
             if (tileInfo.IsWhite)
                 continue;
 
-            Vector2 tilePos = tileInfo.Coordinates;
-            Color color = playerCheckers == _checkerContainer.FirstPlayerCheckers ? Color.red : Color.blue;
-            Transform checker = InstanceChecker(tilePos, color);
+            var tilePos = tileInfo.Coordinates;
+            bool role = playerCheckers != _checkerContainer.FirstPlayerCheckers;
+            
+            var color = ColorSetter.CheckerColor(role);
+            var checker = InstanceChecker(tilePos, color, role);
             playerCheckers.Add(checker);
             tileInfo.IsFull = true;
         }
     }
 
-    private Transform InstanceChecker(Vector2 pos, Color color)
+    private Transform InstanceChecker(Vector2 pos, Color color, bool role)
     {
         Transform checker = Instantiate(_checkerPrefab, pos, Quaternion.identity, _checkerContainerParent);
-        checker.GetComponent<CheckerInfo>().Init(pos, color);
+        var checkerInfo = checker.GetComponent<CheckerInfo>();
+        checkerInfo.Init(pos, color);
+        checkerInfo.Role = role;
         return checker;
     }
 }
