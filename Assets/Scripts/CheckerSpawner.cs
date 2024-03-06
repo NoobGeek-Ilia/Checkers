@@ -6,6 +6,7 @@ public class CheckerSpawner : MonoBehaviour
     [SerializeField] private Transform _checkerPrefab;
     [SerializeField] private Transform _checkerContainerParent;
     [SerializeField] private CheckerContainer _checkerContainer;
+    [SerializeField] private CheckerMovement _checkerMovement;
 
     private List<Transform> _tiles;
 
@@ -21,6 +22,7 @@ public class CheckerSpawner : MonoBehaviour
     {
         FillFirstPlayerTiles();
         FillSecondPlayerTiles();
+        _checkerMovement.AddTileListener();
     }
 
     private void FillFirstPlayerTiles()

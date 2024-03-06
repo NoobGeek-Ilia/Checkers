@@ -10,6 +10,5 @@ public class TileInfo : MonoBehaviour
     {
         Coordinates = coordinates;
         IsWhite = isWhite;
-        IsFull = true;
     }
 }

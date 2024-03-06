@@ -8,6 +8,7 @@ public class CheckerInfo : MonoBehaviour, ISelectable
     public void Init(Vector2 coordinates)
     {
         Coordinates = coordinates;
+        gameObject.transform.position = Coordinates;
     }
 
     public void ResetHighlight(Color color)
