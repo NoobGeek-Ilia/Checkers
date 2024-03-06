@@ -6,6 +6,8 @@ public class CheckerMovement : MonoBehaviour
     [SerializeField] private InputHandler _inputHandler;
 
     private TileInfo _previousTileInfo;
+    private CheckerInfo _previousCheckerInfo;
+
     private Transform _selectedChecker;
 
     public void AddTileListener()
@@ -15,11 +17,9 @@ public class CheckerMovement : MonoBehaviour
 
     private void CheckSelectedTile(Transform tile)
     {
-        Debug.Log("OK");
         var tileInfo = tile.GetComponent<TileInfo>();
         if (!tileInfo.IsFull)
         {
-            Debug.Log("OK1");
             if (_selectedChecker is null)
                 return;
             else
@@ -31,30 +31,33 @@ public class CheckerMovement : MonoBehaviour
         }
         else
         {
-            Debug.Log("OK2");
             _selectedChecker = GetSelectedChecker(tileInfo);
         }
     }
     private void SetNewCheckerCoordinates(TileInfo tileInfo)
     {
-        Debug.Log("OK3");
-        _selectedChecker.GetComponent<CheckerInfo>().Init(tileInfo.Coordinates);
+        var checkerInfo = _selectedChecker.GetComponent<CheckerInfo>();
+        checkerInfo.SetNewPosition(tileInfo.Coordinates);
+        checkerInfo.ResetHighlight();
         _selectedChecker = null;
     }
 
     private Transform GetSelectedChecker(TileInfo tileInfo)
     {
-        foreach (var checker in _checkerContainer.FirstPlayerCheckers)
+        if (_previousCheckerInfo != null)
+            _previousCheckerInfo.ResetHighlight();
+
+        foreach (var checker in _checkerContainer.SecondPlayerCheckers)
         {
             var checkerInfo = checker.GetComponent<CheckerInfo>();
             if (checkerInfo.Coordinates == tileInfo.Coordinates)
             {
-                Debug.Log("OK4");
                 _previousTileInfo = tileInfo;
+                _previousCheckerInfo = checkerInfo;
+                checkerInfo.SetHighlight(ISelectable.SelectColor);
                 return checker;
             }
         }
-        Debug.Log("OK5");
         return null;
     }
 }

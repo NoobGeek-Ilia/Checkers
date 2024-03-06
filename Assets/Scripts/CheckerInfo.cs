@@ -3,17 +3,26 @@ using UnityEngine;
 
 public class CheckerInfo : MonoBehaviour, ISelectable
 {
+    public Color DefaultColor { get; set; }
     public Vector2 Coordinates { get; private set; }
 
-    public void Init(Vector2 coordinates)
+    public void SetNewPosition(Vector2 coordinates)
     {
         Coordinates = coordinates;
-        gameObject.transform.position = Coordinates;
+        transform.position = Coordinates;
     }
 
-    public void ResetHighlight(Color color)
+    public void Init(Vector2 coordinates, Color color)
     {
-        GetComponent<SpriteRenderer>().color = color;
+        Coordinates = coordinates;
+        transform.position = Coordinates;
+        DefaultColor = color;
+        ResetHighlight();
+    }
+
+    public void ResetHighlight()
+    {
+        GetComponent<SpriteRenderer>().color = DefaultColor;
     }
 
     public void SetHighlight(Color color)
