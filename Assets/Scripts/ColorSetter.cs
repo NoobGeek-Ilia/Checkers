@@ -1,20 +1,24 @@
 using UnityEngine;
 
-public static class ColorSetter
+public class ColorSetter : MonoBehaviour
 {
-    public static Color TileColor(bool isBaseColor)
+    [SerializeField] private Color FirstTileColor;
+    [SerializeField] private Color SecondTileColor;
+    [SerializeField] private Color FirstCheckerColor;
+    [SerializeField] private Color SecondCheckerColor;
+    public Color TileColor(bool isBaseColor)
     {
         if (isBaseColor)
-            return Color.white;
+            return FirstTileColor;
         else 
-            return Color.gray;
+            return SecondTileColor;
     }
 
-    public static Color CheckerColor(bool isBaseColor)
+    public Color CheckerColor(bool isBaseColor)
     {
         if (isBaseColor)
-            return Color.blue;
+            return FirstCheckerColor;
         else
-            return Color.red;
+            return SecondCheckerColor;
     }
 }

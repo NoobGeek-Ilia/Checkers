@@ -49,8 +49,8 @@ public class CheckerSpawner : MonoBehaviour
 
             var tilePos = tileInfo.Coordinates;
             bool role = playerCheckers != _checkerContainer.FirstPlayerCheckers;
-            
-            var color = ColorSetter.CheckerColor(role);
+
+            var color = GetComponent<ColorSetter>().CheckerColor(role);
             var checker = InstanceChecker(tilePos, color, role);
             playerCheckers.Add(checker);
             tileInfo.IsFull = true;

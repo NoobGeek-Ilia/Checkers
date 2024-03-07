@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CheckerMovement : MonoBehaviour
@@ -9,10 +10,12 @@ public class CheckerMovement : MonoBehaviour
     private CheckerInfo _previousCheckerInfo;
 
     private Transform _selectedChecker;
+    private List<Transform> _roleTurnCheckers;
 
     public void AddTileListener()
     {
         _inputHandler.OnSelectedTile += CheckSelectedTile;
+        _roleTurnCheckers = _checkerContainer.SecondPlayerCheckers;
     }
 
     private void CheckSelectedTile(Transform tile)
@@ -27,10 +30,13 @@ public class CheckerMovement : MonoBehaviour
         if (_selectedChecker == null)
             return;
 
-        if (IsDiagonalMove(_previousTileInfo.Coordinates, tileInfo.Coordinates))
+        var conditionsIsMet = ConditionsIsMet(_previousTileInfo.Coordinates, tileInfo.Coordinates);
+        if (conditionsIsMet)
         {
             SetNewCheckerCoordinates(tileInfo);
             RefreshTileInfo(tileInfo);
+            _roleTurnCheckers = (_roleTurnCheckers == _checkerContainer.SecondPlayerCheckers) ?
+                                _checkerContainer.FirstPlayerCheckers : _checkerContainer.SecondPlayerCheckers;
         }
     }
 
@@ -53,7 +59,7 @@ public class CheckerMovement : MonoBehaviour
         if (_previousCheckerInfo != null)
             _previousCheckerInfo.ResetHighlight();
 
-        foreach (var checker in _checkerContainer.SecondPlayerCheckers)
+        foreach (var checker in _roleTurnCheckers)
         {
             var checkerInfo = checker.GetComponent<CheckerInfo>();
             if (checkerInfo.Coordinates == tileInfo.Coordinates)
@@ -67,11 +73,18 @@ public class CheckerMovement : MonoBehaviour
         return null;
     }
 
-    private bool IsDiagonalMove(Vector2 startPosition, Vector2 targetPosition)
+    private bool ConditionsIsMet(Vector2 startPosition, Vector2 targetPosition)
     {
-        float deltaX = Mathf.Abs(targetPosition.x - startPosition.x);
-        float deltaY = Mathf.Abs(targetPosition.y - startPosition.y);
+        var deltaX = Mathf.Abs(targetPosition.x - startPosition.x);
+        var deltaY = Mathf.Abs(targetPosition.y - startPosition.y);
+        //one step diagonal movement
+        if (deltaX != 1 || deltaY != 1)
+            return false;
+        return true;
+    }
 
-        return deltaX == deltaY;
+    private Transform GetIntermediateChecker(Vector2 startPosition, Vector2 targetPosition)
+    {
+        return null;
     }
 }

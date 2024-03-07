@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +28,8 @@ public class BoardBuilder : MonoBehaviour
 
     private void SetTileColor(Transform tile, bool isWhite)
     {
-        tile.GetComponent<SpriteRenderer>().color = ColorSetter.TileColor(isWhite);
+        var color = GetComponent<ColorSetter>().TileColor(isWhite);
+        tile.GetComponent<SpriteRenderer>().color = color;
     }
     private bool IsEven(int num) => 
         num % 2 == 0;
